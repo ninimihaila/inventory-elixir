@@ -7,6 +7,8 @@ defmodule InventoryWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug :fetch_live_flash
+    plug :put_root_layout, {InventoryWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
@@ -65,6 +67,8 @@ defmodule InventoryWeb.Router do
     put "/users/settings/update_password", UserSettingsController, :update_password
     put "/users/settings/update_email", UserSettingsController, :update_email
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    live "/inventory", InventoryLive
   end
 
   scope "/", InventoryWeb do
