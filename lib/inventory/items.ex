@@ -21,6 +21,21 @@ defmodule Inventory.Items do
     Repo.all(Item)
   end
 
+  def list_items(criteria) when is_list(criteria) do
+    query = from it in Item
+
+    Enum.reduce(criteria, query, fn
+      {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, ^sort_by}]
+
+      {:filter, %{name: name}}, query ->
+        from q in query, where: ilike(q.name, ^"%#{name}%")
+        # from q in query, where: q.name == ^name
+
+    end)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single item.
 
@@ -101,4 +116,15 @@ defmodule Inventory.Items do
   def change_item(%Item{} = item, attrs \\ %{}) do
     Item.changeset(item, attrs)
   end
+
+  def expires_soon?(item, threshold \\ 10) do
+    today = DateTime.utc_now |> DateTime.to_date
+    Date.diff(item.expiry_date, today) < threshold
+  end
+
+  def is_expired(item) do
+    today = DateTime.utc_now |> DateTime.to_date
+    Date.diff(item.expiry_date, today) < 0
+  end
+
 end
