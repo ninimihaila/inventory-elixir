@@ -59,7 +59,6 @@ defmodule InventoryWeb do
     end
   end
 
-
   def router do
     quote do
       use Phoenix.Router
@@ -82,11 +81,11 @@ defmodule InventoryWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Import basic rendering functionality (render, render_layout, etc)
-      import Phoenix.View
-
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
+
+      # Import basic rendering functionality (render, render_layout, etc)
+      import Phoenix.View
 
       import InventoryWeb.ErrorHelpers
       import InventoryWeb.Gettext

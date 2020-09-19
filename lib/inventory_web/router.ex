@@ -6,7 +6,6 @@ defmodule InventoryWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
     plug :fetch_live_flash
     plug :put_root_layout, {InventoryWeb.LayoutView, :root}
     plug :protect_from_forgery
@@ -21,7 +20,7 @@ defmodule InventoryWeb.Router do
   scope "/", InventoryWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", PageLive, :index
   end
 
   # Other scopes may use custom stacks.

@@ -13,10 +13,10 @@ config :inventory,
 # Configures the endpoint
 config :inventory, InventoryWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "CkQmhNujWNTRhIjWlBnQmdS/vrF9PesAE7+pF/4PDiesuoddwWsxwlCeD6hx66rH",
+  secret_key_base: "sE8h+oFvmKhXtN+pafU6j9STEUwcED6iWPsOMbnlTXjS8jRnxuO6bLtzWQEEYRAm",
   render_errors: [view: InventoryWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Inventory.PubSub,
-  live_view: [signing_salt: "o0hqGgyV"]
+  live_view: [signing_salt: "vPHHMSIV"]
 
 # Configures Elixir's Logger
 config :logger, :console,

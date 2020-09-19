@@ -7,7 +7,7 @@ defmodule InventoryWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_inventory_key",
-    signing_salt: "lNTeYFV8"
+    signing_salt: "yr9r//D4"
   ]
 
   socket "/socket", InventoryWeb.UserSocket,
