@@ -14,6 +14,6 @@ defmodule Inventory.Items.Item do
   def changeset(item, attrs) do
     item
     |> cast(attrs, [:name, :entry_date, :expiry_date])
-    |> validate_required([:name, :entry_date, :expiry_date])
+    |> validate_required([:name, :expiry_date])
   end
 end

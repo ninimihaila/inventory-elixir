@@ -4,7 +4,7 @@ defmodule Inventory.Repo.Migrations.CreateItems do
   def change do
     create table(:items) do
       add :name, :string
-      add :entry_date, :date
+      add :entry_date, :date, default: fragment("now()::date")
       add :expiry_date, :date
 
       timestamps()

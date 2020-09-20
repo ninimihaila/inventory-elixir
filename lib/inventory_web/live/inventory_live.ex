@@ -18,6 +18,8 @@ defmodule InventoryWeb.InventoryLive do
     sort_options = %{sort_by: sort_by, sort_order: sort_order}
     filter_options = %{name: name}
 
+    changeset = Items.change_item(%Item{})
+
     items =
       Items.list_items(
         sort: sort_options,
@@ -28,7 +30,8 @@ defmodule InventoryWeb.InventoryLive do
       assign(socket,
         options: Map.merge(sort_options, filter_options),
         items: items,
-        name: name
+        name: name,
+        changeset: changeset
       )
 
     {:noreply, socket}
@@ -37,11 +40,40 @@ defmodule InventoryWeb.InventoryLive do
   def render(assigns) do
     ~L"""
     <div>
-      <!-- TODO: add form to add item -->
+      <!-- TODO: action buttons -->
+      <!-- TODO: edit -->
       <!-- TODO: filter(s) -->
+      <!-- TODO: style -->
+      <%= f = form_for @changeset, "#",
+          phx_submit: "save" %>
+        <div class="field">
+          <%= label f, :name %>
+          <%= text_input f, :name,
+                          placeholder: "Name",
+                          autocomplete: "off" %>
+          <%= error_tag f, :name %>
+        </div>
+
+        <div class="field">
+          <%= label f, :entry_date %>
+          <%= date_input f, :entry_date %>
+          <%= error_tag f, :entry_date %>
+        </div>
+
+        <div class="field">
+          <%= label f, :expiry_date %>
+          <%= date_input f, :expiry_date %>
+          <%= error_tag f, :expiry_date %>
+        </div>
+
+        <%= submit "Add item", phx_disable_with: "Saving..." %>
+      </form>
+
+
       <form phx-change="filter">
         <input type="text" name="name"
           value="<%= @name %>"
+          autocomplete="false"
           placeholder="Search" autofocus
           />
       </form>
@@ -57,7 +89,16 @@ defmodule InventoryWeb.InventoryLive do
         <tbody>
         <%= for item <- @items do %>
           <tr class="<%= item_class(item)%>">
-            <td><%= item.name %></td><td><%= item.expiry_date %></td><td></td>
+            <td><%= item.name %></td>
+            <td><%= item.expiry_date %></td>
+            <td>
+              <button class="delete-btn"
+                  phx-click="delete"
+                  phx-value-id="<%= item.id %>"
+                  phx-disable-with="Deleting...">
+                Delete
+              </button>
+            </td>
           </tr>
         <% end %>
         </tbody>
@@ -72,6 +113,40 @@ defmodule InventoryWeb.InventoryLive do
         socket,
         __MODULE__,
         name: name,
+        sort_by: socket.assigns.options.sort_by,
+        sort_order: socket.assigns.options.sort_order
+      )
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("save", %{"item" => params}, socket) do
+    case Items.create_item(params) do
+      {:ok, _item} ->
+        changeset = Items.change_item(%Item{})
+
+        # TODO: this should be done with phx-prepend somehow
+        items = Items.list_items(socket.assigns.options)
+
+        socket = assign(socket, changeset: changeset, items: items)
+
+        {:noreply, socket}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+          socket = assign(socket, changeset: changeset)
+          {:noreply, socket}
+    end
+  end
+
+  def handle_event("delete", %{"id" => id}, socket) do
+    Items.delete_item(Items.get_item!(id))
+
+    socket = push_patch(socket,
+      to: Routes.live_path(
+        socket,
+        __MODULE__,
+        name: socket.assigns.options.name,
         sort_by: socket.assigns.options.sort_by,
         sort_order: socket.assigns.options.sort_order
       )

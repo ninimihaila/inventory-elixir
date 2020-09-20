@@ -26,12 +26,10 @@ defmodule Inventory.Items do
 
     Enum.reduce(criteria, query, fn
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
-        from q in query, order_by: [{^sort_order, ^sort_by}]
+        from q in query, order_by: [{^sort_order, ^sort_by}, {:asc, :name}]
 
       {:filter, %{name: name}}, query ->
         from q in query, where: ilike(q.name, ^"%#{name}%")
-        # from q in query, where: q.name == ^name
-
     end)
     |> Repo.all()
   end
@@ -119,7 +117,7 @@ defmodule Inventory.Items do
 
   def expires_soon?(item, threshold \\ 10) do
     today = DateTime.utc_now |> DateTime.to_date
-    Date.diff(item.expiry_date, today) < threshold
+    Date.diff(item.expiry_date, today) <= threshold
   end
 
   def is_expired(item) do
