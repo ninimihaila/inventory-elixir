@@ -107,20 +107,6 @@ defmodule InventoryWeb.InventoryLive do
     """
   end
 
-  def handle_event("filter", %{"name" => name}, socket) do
-    socket = push_patch(socket,
-      to: Routes.live_path(
-        socket,
-        __MODULE__,
-        name: name,
-        sort_by: socket.assigns.options.sort_by,
-        sort_order: socket.assigns.options.sort_order
-      )
-    )
-
-    {:noreply, socket}
-  end
-
   def handle_event("save", %{"item" => params}, socket) do
     case Items.create_item(params) do
       {:ok, _item} ->
@@ -142,17 +128,19 @@ defmodule InventoryWeb.InventoryLive do
   def handle_event("delete", %{"id" => id}, socket) do
     Items.delete_item(Items.get_item!(id))
 
-    socket = push_patch(socket,
-      to: Routes.live_path(
-        socket,
-        __MODULE__,
-        name: socket.assigns.options.name,
-        sort_by: socket.assigns.options.sort_by,
-        sort_order: socket.assigns.options.sort_order
-      )
-    )
+    {:noreply, redirect_with_attrs(socket)}
+  end
 
-    {:noreply, socket}
+  def handle_event("filter", %{"name" => name}, socket) do
+    {:noreply, redirect_with_attrs(socket, name: name)}
+  end
+
+  defp redirect_with_attrs(socket, attrs \\ %{}) do
+    name = attrs[:name] || socket.assigns.name
+    sort_by = attrs[:sort_by] || socket.assigns.options.sort_by
+    sort_order = attrs[:sort_order] || socket.assigns.options.sort_order
+
+    push_patch(socket, to: Routes.live_path(socket, __MODULE__, name: name, sort_by: sort_by, sort_order: sort_order))
   end
 
   def sort_link(socket, text, sort_by, options) do
