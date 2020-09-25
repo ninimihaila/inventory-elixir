@@ -37,14 +37,32 @@ defmodule InventoryWeb.InventoryLive do
     {:noreply, socket}
   end
 
+  # def handle_info({:updated_item, item}, socket) do
+  #   socket =
+  #     socket
+  #     |> update(:items, fn items -> [item | items] end)
+
+  #   {:noreply, socket}
+  # end
+
+  # def handle_info({:deleted_item, item}, socket) do
+  #   socket =
+  #     socket
+  #     |> update(:items, fn items -> [item | items] end)
+
+  #   {:noreply, socket}
+  # end
+
   def handle_event("save", %{"item" => params}, socket) do
     case Items.create_item(params) do
       {:ok, _item} ->
         changeset = Items.change_item(%Item{})
 
-        socket = assign(socket, changeset: changeset)
+        # send(self(), {:updated_item, item})
 
-        {:noreply, socket}
+        # socket = assign(socket, changeset: changeset)
+
+        {:noreply, redirect_with_attrs(socket)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
           socket = assign(socket, changeset: changeset)
@@ -53,9 +71,15 @@ defmodule InventoryWeb.InventoryLive do
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
-    Items.delete_item(Items.get_item!(id))
+    case Items.delete_item(Items.get_item!(id)) do
+      {:ok, _item} ->
+        # send(self(), {:deleted_item, item})
 
-    {:noreply, redirect_with_attrs(socket)}
+        {:noreply, redirect_with_attrs(socket)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
   end
 
   def handle_event("filter", %{"name" => name}, socket) do
@@ -81,6 +105,14 @@ defmodule InventoryWeb.InventoryLive do
       )
     )
   end
+
+  # defp sort_header_link(text, s, %{"sort_by" => sort_by, "sort_order"=> sort_order}) when sort_by == s do
+  #   "#{text} #{sort_arrow(sort_order)}"
+  # end
+  # defp sort_header_link(text, _, _), do: text
+
+  # defp sort_arrow(:asc), do: "▲"
+  # defp sort_arrow(:desc), do: "▼"
 
   defp item_class(item) do
     cond do

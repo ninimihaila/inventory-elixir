@@ -45,9 +45,12 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="items-list">
     <%= for item <- @items do %>
-      <tr class="<%= item_class(item)%>">
+      <tr class="<%= item_class(item) %>">
+      <!--
+      <%# <tr id="list-item-<%= item.id %>"
+      <%#    class="<%= item_class(item)%> <%= if item.__meta__.state == :deleted do %>hidden<% end %>" > -->
         <td><%= item.name %></td>
         <td><%= item.expiry_date %></td>
         <td>
