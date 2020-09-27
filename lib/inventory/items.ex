@@ -25,6 +25,11 @@ defmodule Inventory.Items do
     query = from it in Item
 
     Enum.reduce(criteria, query, fn
+      # when sorting by name, do a case insensitive search
+      {:sort, %{sort_by: :name, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, fragment("lower(?)", field(q, :name))}]
+
+      # when sorting by other fields, sort by name as the second parameter
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}, {:asc, :name}]
 

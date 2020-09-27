@@ -56,12 +56,6 @@ defmodule InventoryWeb.InventoryLive do
   def handle_event("save", %{"item" => params}, socket) do
     case Items.create_item(params) do
       {:ok, _item} ->
-        changeset = Items.change_item(%Item{})
-
-        # send(self(), {:updated_item, item})
-
-        # socket = assign(socket, changeset: changeset)
-
         {:noreply, redirect_with_attrs(socket)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -73,8 +67,6 @@ defmodule InventoryWeb.InventoryLive do
   def handle_event("delete", %{"id" => id}, socket) do
     case Items.delete_item(Items.get_item!(id)) do
       {:ok, _item} ->
-        # send(self(), {:deleted_item, item})
-
         {:noreply, redirect_with_attrs(socket)}
 
       {:error, changeset} ->
@@ -95,7 +87,7 @@ defmodule InventoryWeb.InventoryLive do
   end
 
   def sort_link(socket, text, sort_by, options) do
-    live_patch(text,
+    live_patch("#{text} #{sort_order_icon(options.sort_by, sort_by, options.sort_order)}",
       to: Routes.live_path(
         socket,
         __MODULE__,
@@ -106,13 +98,9 @@ defmodule InventoryWeb.InventoryLive do
     )
   end
 
-  # defp sort_header_link(text, s, %{"sort_by" => sort_by, "sort_order"=> sort_order}) when sort_by == s do
-  #   "#{text} #{sort_arrow(sort_order)}"
-  # end
-  # defp sort_header_link(text, _, _), do: text
-
-  # defp sort_arrow(:asc), do: "▲"
-  # defp sort_arrow(:desc), do: "▼"
+  defp sort_order_icon(column, sort_by, :asc) when column == sort_by, do: "▲"
+  defp sort_order_icon(column, sort_by, :desc) when column == sort_by, do: "▼"
+  defp sort_order_icon(_, _, _), do: ""
 
   defp item_class(item) do
     cond do
