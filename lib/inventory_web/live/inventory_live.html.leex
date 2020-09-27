@@ -4,6 +4,7 @@
   <!-- TODO: filter(s) -->
   <!-- TODO: style -->
   <%= f = form_for @changeset, "#",
+      class: "add-item-form",
       phx_submit: "save" %>
     <div class="field">
       <%= label f, :name %>
@@ -54,6 +55,12 @@
         <td><%= item.name %></td>
         <td><%= item.expiry_date %></td>
         <td>
+          <button class="edit-btn"
+              phx-click="edit"
+              phx-value-id="<%= item.id %>"
+              phx-disable-with="Editing...">
+            Edit
+          </button>
           <button class="delete-btn"
               phx-click="delete"
               phx-value-id="<%= item.id %>"

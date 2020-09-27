@@ -37,22 +37,6 @@ defmodule InventoryWeb.InventoryLive do
     {:noreply, socket}
   end
 
-  # def handle_info({:updated_item, item}, socket) do
-  #   socket =
-  #     socket
-  #     |> update(:items, fn items -> [item | items] end)
-
-  #   {:noreply, socket}
-  # end
-
-  # def handle_info({:deleted_item, item}, socket) do
-  #   socket =
-  #     socket
-  #     |> update(:items, fn items -> [item | items] end)
-
-  #   {:noreply, socket}
-  # end
-
   def handle_event("save", %{"item" => params}, socket) do
     case Items.create_item(params) do
       {:ok, _item} ->

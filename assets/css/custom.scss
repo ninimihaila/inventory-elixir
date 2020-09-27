@@ -1,0 +1,38 @@
+
+.expired {
+  color: red
+}
+
+.expires-soon {
+  color: orange
+}
+
+.hidden {
+  display: none;
+}
+
+.logo {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+$redColor: #be0000;
+
+.delete-btn {
+  background-color: $redColor;
+  border-color: $redColor;
+}
+
+.add-item-form {
+  @apply flex flex-col justify-items-stretch;
+}
+
+input{
+  @apply border rounded-md p-2;
+}
+
+@screen sm {
+  .add-item-form {
+    @apply flex-row justify-between items-end;
+  }
+}
