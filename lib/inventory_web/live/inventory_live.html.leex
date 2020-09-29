@@ -41,9 +41,9 @@
   <table>
     <thead>
       <tr>
-        <th><%= sort_link(@socket, "Item", :name, @options) %></th>
-        <th><%= sort_link(@socket, "Expires", :expiry_date, @options) %></th>
-        <th>Actions</th>
+        <th class="item-name"><%= sort_link(@socket, "Item", :name, @options) %></th>
+        <th class="item-expiry-date"><%= sort_link(@socket, "Expires", :expiry_date, @options) %></th>
+        <th class="item-actions">Actions</th>
       </tr>
     </thead>
     <tbody id="items-list">
@@ -52,9 +52,9 @@
       <!--
       <%# <tr id="list-item-<%= item.id %>"
       <%#    class="<%= item_class(item)%> <%= if item.__meta__.state == :deleted do %>hidden<% end %>" > -->
-        <td><%= item.name %></td>
-        <td><%= item.expiry_date %></td>
-        <td>
+        <td class="item-name"><%= item.name %></td>
+        <td class="item-expiry-date"><%= item.expiry_date %></td>
+        <td class="item-actions">
           <button class="edit-btn"
               phx-click="edit"
               phx-value-id="<%= item.id %>"

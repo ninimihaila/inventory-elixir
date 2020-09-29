@@ -12,15 +12,15 @@
   <body>
     <header>
       <section class="container">
-        <nav role="navigation">
-          <ul>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-          <%= render "_user_menu.html", assigns %>
-        </nav>
-        <div class="logo">Inventory</div>
+          <div class="logo">Inventory</div>
+          <nav role="navigation">
+            <ul>
+              <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+                <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
+              <% end %>
+            </ul>
+            <%= render "_user_menu.html", assigns %>
+          </nav>
       </section>
     </header>
       <%= @inner_content %>

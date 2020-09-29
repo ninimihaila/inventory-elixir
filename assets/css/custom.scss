@@ -1,3 +1,4 @@
+$redColor: #be0000;
 
 .expired {
   color: red
@@ -16,8 +17,6 @@
   font-weight: bold;
 }
 
-$redColor: #be0000;
-
 .delete-btn {
   background-color: $redColor;
   border-color: $redColor;
@@ -25,14 +24,42 @@ $redColor: #be0000;
 
 .add-item-form {
   @apply flex flex-col justify-items-stretch;
+
+  button {
+    @apply mb-1 h-10;
+  }
 }
 
 input{
-  @apply border rounded-md p-2;
+  @apply border rounded w-full p-2 mt-1 mb-1 h-10;
+}
+
+button {
+  @apply border rounded bg-blue-500 uppercase text-white font-semibold p-2;
+}
+
+table {
+  @apply w-full;
+
+  .item-actions {
+    @apply flex justify-end;
+  }
+
+  th {
+    @apply text-left;
+
+    .item-actions {
+      @apply text-right;
+    }
+  }
 }
 
 @screen sm {
   .add-item-form {
     @apply flex-row justify-between items-end;
+
+    button {
+      @apply w-28;
+    }
   }
 }

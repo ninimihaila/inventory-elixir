@@ -1,0 +1,22 @@
+body {
+  @apply flex flex-col items-center;
+}
+
+header {
+  @apply flex justify-center w-full pt-5 pb-5 mb-8;
+  @apply bg-gray-100 border-b border-gray-300;
+
+  section {
+    @apply flex flex-row items-center justify-between max-w-7xl;
+  }
+
+  nav {
+    ul, li {
+      @apply m-0 p-0 block text-right whitespace-no-wrap;
+    }
+
+    a {
+      @apply font-bold text-blue-500;
+    }
+  }
+}
